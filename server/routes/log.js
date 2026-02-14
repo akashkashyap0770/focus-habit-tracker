@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/authMiddleware");
-const Log = require("../models/log"); 
+const Log = require("../models/Log"); 
 
 // 🔹 Add Log
 router.post("/", auth, async (req, res) => {

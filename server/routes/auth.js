@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router(); // Router create (modular routes ke liye)
 
-const User = require("../models/user"); // user model (MongoDB collection)
+const User = require("../models/User"); // user model (MongoDB collection)
 
 const jwt = require("jsonwebtoken"); // JWT token generate karne ke liye
 
