@@ -3,28 +3,24 @@ import { useAuth } from "./AuthContext";
 
 const LogContext = createContext();
 
+// 🔹 Backend base URL
+const BASE_URL = "https://focus-habit-tracker-d0ml.onrender.com";
+
 export const LogProvider = ({ children }) => {
   const { user } = useAuth();
   const [logs, setLogs] = useState([]);
 
-  // 🔹 Fetch logs for logged in user
   const fetchLogs = async () => {
     if (!user) return;
-
     try {
       const token = localStorage.getItem("token");
-
-      const res = await fetch("http://localhost:5000/api/log", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await fetch(`${BASE_URL}/api/log`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
       if (!res.ok) {
         const errorData = await res.json();
         return console.error("Fetch Logs Error:", errorData);
       }
-
       const data = await res.json();
       setLogs(data);
     } catch (err) {
@@ -32,17 +28,14 @@ export const LogProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Fetch when user changes (login/logout)
   useEffect(() => {
     fetchLogs();
   }, [user]);
 
-  // 🔹 Add log
   const addLog = async (log) => {
     try {
       const token = localStorage.getItem("token");
-
-      const res = await fetch("http://localhost:5000/api/log", {
+      const res = await fetch(`${BASE_URL}/api/log`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -54,41 +47,28 @@ export const LogProvider = ({ children }) => {
           duration: Number(log.duration),
         }),
       });
-
       if (!res.ok) {
         const errData = await res.json();
         return console.error("Add Log Error:", errData);
       }
-
       const savedLog = await res.json();
-
-      // Update UI immediately
       setLogs((prev) => [savedLog, ...prev]);
     } catch (err) {
       console.error("Add Log Error:", err);
     }
   };
 
-  // 🔹 Delete log
   const deleteLog = async (id) => {
     try {
       const token = localStorage.getItem("token");
-
-      const res = await fetch(
-        `http://localhost:5000/api/log/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
+      const res = await fetch(`${BASE_URL}/api/log/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!res.ok) {
         const errData = await res.json();
         return console.error("Delete Log Error:", errData);
       }
-
       setLogs((prev) => prev.filter((log) => log._id !== id));
     } catch (err) {
       console.error("Delete Log Error:", err);

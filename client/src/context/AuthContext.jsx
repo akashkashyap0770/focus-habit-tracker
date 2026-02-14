@@ -3,13 +3,16 @@ import axios from "axios";
 
 const AuthContext = createContext();
 
+// 🔹 Backend base URL
+const BASE_URL = "https://focus-habit-tracker-d0ml.onrender.com";
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(
         JSON.parse(localStorage.getItem("user")) || null
     );
 
     const signup = async (email, password) => {
-        const res = await axios.post("http://localhost:5000/api/auth/signup", { email, password });
+        const res = await axios.post(`${BASE_URL}/api/auth/signup`, { email, password });
         localStorage.setItem("token", res.data.token);
         const userData = { id: res.data.user.id, email: res.data.user.email };
         setUser(userData);
@@ -17,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const login = async (email, password) => {
-        const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+        const res = await axios.post(`${BASE_URL}/api/auth/login`, { email, password });
         localStorage.setItem("token", res.data.token);
         const userData = { id: res.data.user.id, email: res.data.user.email };
         setUser(userData);
