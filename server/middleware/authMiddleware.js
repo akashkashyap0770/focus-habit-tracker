@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken"); // JWT verify karne ke liye
-const User = require("../models/User"); // User model (MongoDB se user find karne ke liye)
+const User = require("../models/user"); // User model (MongoDB se user find karne ke liye)
 
 // Authentication middleware
 const auth = async (req, res, next) => {
